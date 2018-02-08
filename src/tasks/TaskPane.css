@@ -1,0 +1,25 @@
+.TaskPane {
+  text-align: initial;
+  color: #333333;
+}
+
+.TaskPane h2, .TaskPane h3 {
+  color: #555555;
+  margin: 3px 5px;
+}
+
+.TaskPane.list-container {
+  display: flex;
+  background-color: white;
+  margin: 0 5px;
+  flex-direction: row;
+}
+
+.TaskPane .list-item {
+  background-color: #e8e8e8;
+  min-width: 300px;
+  list-style-type: none;
+  margin: 0 5px;
+  padding: 7px;
+  border-radius: 5px;
+}

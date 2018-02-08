@@ -1,0 +1,15 @@
+.NegativeSpace > .ns {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.NegativeSpace.disabled > .ns {
+  display: none;
+}
+
+.NegativeSpace > .content {
+  position: relative;
+}

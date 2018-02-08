@@ -1,0 +1,71 @@
+.TaskCard > .container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-height: 100%;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.TaskCard.hidden > .container {
+  display: none;
+}
+
+.TaskCard > .background {
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 100%;
+  transition: background-color 0.2s linear;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.TaskCard.hidden .background {
+  background-color: rgba(0, 0, 0, 0.0);
+  height: 0%;
+  transition:
+    background-color 0.2s linear,
+    height 0s 0.2s linear;
+}
+
+.TaskCard > .container > .content {
+  position: absolute;
+  align-self: center;
+  max-height: 100%;
+  border-radius: 5px;
+  padding: 7px;
+  background-color: rgba(150, 200, 230, 0.6);
+  color: white;
+  width: 700px;
+  min-height: 50px;
+  overflow-y: auto;
+  overflow-x: visible;
+  z-index: 200;
+}
+
+.TaskCard .top-div {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.TaskCard > .container > .content > .button-bar {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.TaskCard .button-bar > *:not(:last-child) {
+  margin-right: 7px;
+}
+
+/*linear-gradient(to top, #6d50a2, #ed2b88);*/

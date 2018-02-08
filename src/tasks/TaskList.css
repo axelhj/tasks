@@ -1,0 +1,14 @@
+.TaskList .item {
+  border-radius: 3px;
+  padding: 5px;
+  margin: 7px 2px;
+  background-color: #96C8E6;
+  cursor: default;
+}
+
+.TaskList .add-item {
+  background-color: transparent;
+  cursor: default;
+}
+
+/*linear-gradient(to top, #6d50a2, #ed2b88);*/

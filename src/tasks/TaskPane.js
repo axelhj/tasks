@@ -1,0 +1,25 @@
+import React, { Component } from 'react';
+
+import { TaskList } from './TaskList.js';
+import './TaskPane.css';
+
+export class TaskPane extends Component {
+  render() {
+    return (
+      <div className="TaskPane list-container">
+        { this.props.taskLists.map(taskList =>
+          <div
+            key={ taskList.name + "TODO:USE ID" }
+            className="list-item"
+          >
+            <h3>{ taskList.name }</h3>
+            <TaskList
+              tasks={ taskList.tasks }
+              onClick={ task => this.props.onClick(task, taskList.name) }
+              onClickAddTask={ () => this.props.onAddTask(taskList) }
+            />
+          </div>) }
+      </div>
+    );
+  }
+}

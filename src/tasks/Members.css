@@ -1,0 +1,13 @@
+
+.Members .member {
+  border-radius: 5px;
+  padding: 7px;
+  margin: 5px 0;
+  background-color: #EEEE00;
+  border: 1px solid #EEEE33;
+}
+
+.Members .member .name {
+  color: #444444;
+  margin: 0;
+}
