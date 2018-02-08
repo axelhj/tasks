@@ -1,13 +1,26 @@
-
 .Members .member {
   border-radius: 5px;
   padding: 7px;
   margin: 5px 0;
   background-color: #EEEE00;
   border: 1px solid #EEEE33;
+  cursor: default;
 }
 
-.Members .member .name {
+.Members .member > .name {
   color: #444444;
   margin: 0;
+}
+
+.Members .member > .check-area {
+  display: inline-block;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: #444444;
+  visibility: hidden;
+}
+
+.Members .member > .checked {
+  visibility: visible;
 }

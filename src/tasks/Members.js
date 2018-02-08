@@ -8,10 +8,29 @@ export class Members extends Component {
   constructor() {
     super();
     this.state = {
-      expanded: false
+      expanded: false,
+      members: []
     };
   }
-    
+
+  componentDidMount() {
+    this.setState({
+      members: this.getMembers(),
+      expanded: false
+    });
+  }
+
+  getMembers = () => (
+    this.props.teamMembers.map(member => ({
+      checked: this.isChecked(member),
+      ...member
+    }))
+  )
+
+  isChecked = ({ name }) =>
+    !!this.props.assignedMembers.find(assignedMember =>
+      assignedMember.name === name)
+
   onClick = () => {
     this.setState(state => ({
       expanded: !state.expanded
@@ -19,18 +38,29 @@ export class Members extends Component {
     console.log("clicked, clickity", this.state.expanded);
   }
 
+  onClickMember = index => {
+    const member = this.state.members[index];
+    member.checked = !member.checked;
+    const updatedState = {
+      members: this.state.members
+    };
+    this.setState(updatedState);
+    this.props.onUpdated(updatedState.members);
+  }
+
   renderMembers() {
-    const members = [
-      { name: "Person 1" },
-      { name: "Person 2" },
-      { name: "Person 3" }
-    ];
     return (
       <NegativeSpace onClick={ this.onClick }>
-        { members.map(({ name }, index) => (
-          <div key={ index } className="member">
-            <p className="name">{ name }</p>
-          </div>
+        { this.state.members.map(({ name, checked }, index) => (
+          <p
+            key={ index }
+            className="member"
+            onClick={ () => this.onClickMember(index) }
+          >
+            <span className={ "check-area" + (checked ? " checked" : "") }></span>
+            { " " }
+            <span className="name">{ name }</span>
+          </p>
         )) }
       </NegativeSpace>
     );
