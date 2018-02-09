@@ -74,6 +74,22 @@ class App extends Component {
     });
   }
 
+  onAddPane = () => {
+    const { taskLists } = this.state;
+    let paneNumber = 0;
+    for (let taskList of taskLists) {
+      const value = parseInt(taskList.name.match(/\d$/)[0], 10);
+      if (value > paneNumber) {
+        paneNumber = value;
+      }
+    }
+    taskLists.push({
+      name: `Pane ${paneNumber + 1}`,
+      tasks: []
+    });
+    this.setState({ taskLists });
+  }
+
   onAddTask = taskList => {
     const { name, tasks } = taskList;
     let taskNumber = 0;
@@ -150,6 +166,7 @@ class App extends Component {
           <TaskPane
             taskLists={ this.state.taskLists }
             onClick={ this.onClickTask }
+            onAddPane= { this.onAddPane }
             onAddTask={ this.onAddTask }
           ></TaskPane>
         </div>

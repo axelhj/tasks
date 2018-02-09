@@ -19,6 +19,9 @@ export class TaskPane extends Component {
               onClickAddTask={ () => this.props.onAddTask(taskList) }
             />
           </div>) }
+          <div className="list-item add-pane" onClick={ this.props.onAddPane }>
+            <h3>Add pane...</h3>
+          </div>
       </div>
     );
   }
