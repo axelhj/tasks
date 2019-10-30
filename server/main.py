@@ -14,6 +14,19 @@ def connect():
         print(error)
         return None
 
+def execute_sql(sql):
+    conn = connect()
+    if conn != None and conn.is_connected():
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchmany()
+        result = []
+        while rows:
+            result += rows
+            rows = cursor.fetchmany()
+        return result
+    return None
+
 app = None
 def init_api():
     app = Flask(__name__)
@@ -23,14 +36,9 @@ def init_api():
         res = []
         conn = connect()
         if conn != None and conn.is_connected():
-            print("connecting succeeded")
-            cursor = conn.cursor()
-            cursor.execute('select title, description from task limit 100')
-            rows = cursor.fetchmany()
-            while rows:
-                for row in rows:
-                    res.append(row[0] + ": " + row[1])
-                rows = cursor.fetchmany()
+            rows = execute_sql('select title, description from task limit 100')
+            for row in rows:
+                res.append(row[0] + ": " + row[1])
         return jsonify(res)
 
     app.run(host="0.0.0.0", port=80),
