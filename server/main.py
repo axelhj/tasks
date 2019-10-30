@@ -1,6 +1,6 @@
 from mysql import connector
 from mysql.connector import Error
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 def connect():
     try:
@@ -27,7 +27,6 @@ def execute_sql(sql):
         return result
     return None
 
-app = None
 def init_api():
     app = Flask(__name__)
 
@@ -36,9 +35,14 @@ def init_api():
         res = []
         conn = connect()
         if conn != None and conn.is_connected():
-            rows = execute_sql('select title, description from task limit 100')
-            for row in rows:
-                res.append(row[0] + ": " + row[1])
+            sql = execute_sql('select title, description from task limit 100')
+            if not sql:
+                return jsonify('error')
+            return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+
+    @app.route("/echo", methods=["POST"])
+    def echo():
+        res = request.json
         return jsonify(res)
 
     app.run(host="0.0.0.0", port=80),
