@@ -20,15 +20,46 @@ class Db:
             print("Db-error: " + str(error))
             return None
 
-    def execute_sql(self, sql):
-        conn = self.connect()
-        if conn == None or not conn.is_connected():
-            return None
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        rows = cursor.fetchmany()
-        result = []
-        while rows:
-            result += rows
+    def sql(self, sql, fetch = True):
+        try:
+            conn = self.connect()
+            if conn == None or not conn.is_connected():
+                return None
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            if not fetch:
+                return None
             rows = cursor.fetchmany()
-        return result
+            result = []
+            while rows:
+                result += rows
+                rows = cursor.fetchmany()
+            return result
+        finally:
+            if conn and conn.is_connected():
+                if cursor:
+                    cursor.close()
+                conn.close()
+
+    def prepared_sql(self, sql, values = [], fetch = True):
+        conn = None
+        cursor = None
+        try:
+            conn = self.connect()
+            if conn == None or not conn.is_connected():
+                return None
+            cursor = conn.cursor(prepared = True)
+            cursor.execute(sql, values)
+            if not fetch:
+                return None
+            rows = cursor.fetchmany()
+            result = []
+            while rows:
+                result += rows
+                rows = cursor.fetchmany()
+            return result
+        finally:
+            if conn and conn.is_connected():
+                if cursor:
+                    cursor.close()
+                conn.close()
