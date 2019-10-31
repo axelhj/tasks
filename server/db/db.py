@@ -32,6 +32,39 @@ class Db:
             print("Db-error: " + str(error))
             return None
 
+    def sql_nested_list(self, sql, fields, sub_key, id_index, split_index):
+        try:
+            conn = self.connect()
+            if conn == None or not conn.is_connected():
+                return None
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            rows = cursor.fetchmany()
+            ids = {}
+            groups = []
+            while rows:
+                for row in rows:
+                    id = row[id_index]
+                    ids[id] = True
+                    last_group = None
+                    if len(groups) > 0:
+                        last_group = groups[len(groups) - 1]
+                    sub_obj = get_obj([row[split_index:]], fields[split_index:])[0]
+                    if last_group and id == last_group[fields[id_index]]:
+                        last_group[sub_key].append(sub_obj)
+                    else:
+                        obj = get_obj([row[:split_index]], fields)[0]
+                        obj[sub_key] = [sub_obj]
+                        groups.append(obj)
+                rows = cursor.fetchmany()
+            # len(keys(ids))) should match len(groups)
+            return groups
+        finally:
+            if conn and conn.is_connected():
+                if cursor:
+                    cursor.close()
+                conn.close()
+
     def sql(self, sql, fields = None, fetch = True):
         try:
             conn = self.connect()
