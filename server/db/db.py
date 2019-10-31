@@ -1,6 +1,18 @@
 from mysql import connector
 from mysql.connector import Error
 
+def get_obj(rows, fields):
+    if fields:
+        result = []
+        for row in rows:
+            obj = {}
+            for i, field in enumerate(row, start=0):
+                obj[fields[i]] = field
+            result.append(obj)
+        return result
+    else:
+        return rows
+
 class Db:
     def __init__(self, host, database, user, password):
         self.host = host
@@ -20,7 +32,7 @@ class Db:
             print("Db-error: " + str(error))
             return None
 
-    def sql(self, sql, fetch = True):
+    def sql(self, sql, fields = None, fetch = True):
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
@@ -32,7 +44,7 @@ class Db:
             rows = cursor.fetchmany()
             result = []
             while rows:
-                result += rows
+                result += get_obj(rows, fields)
                 rows = cursor.fetchmany()
             return result
         finally:
@@ -55,7 +67,7 @@ class Db:
             rows = cursor.fetchmany()
             result = []
             while rows:
-                result += rows
+                result += get_obj(rows, fields)
                 rows = cursor.fetchmany()
             return result
         finally:

@@ -10,11 +10,17 @@ class Api:
         app = Flask(__name__)
         @app.route("/")
         def hello():
-            res = []
             sql = self.tasks.get_all()
             if not sql:
                 return jsonify('error')
             return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+
+        @app.route("/lists")
+        def lists():
+            sql = self.tasks.get_lists()
+            if not sql:
+                return jsonify('error')
+            return jsonify(sql)
 
         @app.route("/echo", methods=["POST"])
         def echo():
