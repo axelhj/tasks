@@ -21,3 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /.vscode
+
+# python
+**/__pycache__/**/*
