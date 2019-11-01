@@ -68,12 +68,14 @@ class Db:
                 conn.close()
 
     def sql(self, sql, fields = None, fetch = True):
+        conn = None
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor()
             cursor.execute(sql)
+            conn.commit()
             if not fetch:
                 return None
             rows = cursor.fetchmany()
@@ -83,6 +85,8 @@ class Db:
                 rows = cursor.fetchmany()
             return result
         except Error as error:
+            if conn and conn.is_connected():
+                conn.rollback()
             raise DbError(error)
         finally:
             if conn and conn.is_connected():
@@ -99,6 +103,7 @@ class Db:
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor(prepared = True)
             cursor.execute(sql, values)
+            conn.commit()
             if not fetch:
                 return None
             rows = cursor.fetchmany()
@@ -108,6 +113,8 @@ class Db:
                 rows = cursor.fetchmany()
             return result
         except Error as error:
+            if conn and conn.is_connected():
+                conn.rollback()
             raise DbError(error)
         finally:
             if conn and conn.is_connected():
