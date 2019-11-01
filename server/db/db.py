@@ -1,5 +1,6 @@
 from mysql import connector
 from mysql.connector import Error
+from db.db_error import DbError
 
 def get_obj(rows, fields):
     if fields:
@@ -29,14 +30,13 @@ class Db:
                 password = self.password
             )
         except Error as error:
-            print("Db-error: " + str(error))
-            return None
+            raise DbError(error)
 
     def sql_nested_list(self, sql, fields, sub_key, id_index, split_index):
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
-                return None
+                raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor()
             cursor.execute(sql)
             rows = cursor.fetchmany()
@@ -59,6 +59,8 @@ class Db:
                 rows = cursor.fetchmany()
             # len(keys(ids))) should match len(groups)
             return groups
+        except Error as error:
+            raise DbError(error)
         finally:
             if conn and conn.is_connected():
                 if cursor:
@@ -69,7 +71,7 @@ class Db:
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
-                return None
+                raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor()
             cursor.execute(sql)
             if not fetch:
@@ -80,6 +82,8 @@ class Db:
                 result += get_obj(rows, fields)
                 rows = cursor.fetchmany()
             return result
+        except Error as error:
+            raise DbError(error)
         finally:
             if conn and conn.is_connected():
                 if cursor:
@@ -92,7 +96,7 @@ class Db:
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
-                return None
+                raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor(prepared = True)
             cursor.execute(sql, values)
             if not fetch:
@@ -103,6 +107,8 @@ class Db:
                 result += get_obj(rows, fields)
                 rows = cursor.fetchmany()
             return result
+        except Error as error:
+            raise DbError(error)
         finally:
             if conn and conn.is_connected():
                 if cursor:

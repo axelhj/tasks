@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from db.db_error import DbError
 from db.tasks import Tasks
 
 class Api:
@@ -10,20 +11,25 @@ class Api:
         app = Flask(__name__)
         @app.route("/")
         def hello():
-            sql = self.tasks.get_all()
-            if not sql:
-                return jsonify('error')
-            return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+            try:
+                sql = self.tasks.get_all()
+                return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+            except DbError as error:
+                return jsonify(str(error))
 
         @app.route("/lists")
         def lists():
-            sql = self.tasks.get_lists()
-            if not sql:
-                return jsonify('error')
-            return jsonify(sql)
+            try:
+                sql = self.tasks.get_lists()
+                return jsonify(sql)
+            except DbError as error:
+                return jsonify(str(error))
 
         @app.route("/echo", methods=["POST"])
         def echo():
-            res = request.json
-            return jsonify(res)
+            try:
+                res = request.json
+                return jsonify(res)
+            except error:
+                return jsonify(str(error))
         return app
