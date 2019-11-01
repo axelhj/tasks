@@ -32,7 +32,8 @@ class Db:
         except Error as error:
             raise DbError(error)
 
-    def sql_nested_list(self, sql, fields, sub_key, id_index, split_index):
+    def sql_nested_list(self, sql, fields, sub_key, id_index, nested_id_index, split_index):
+        conn = None
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
@@ -52,9 +53,12 @@ class Db:
                     sub_obj = get_obj([row[split_index:]], fields[split_index:])[0]
                     if last_group and id == last_group[fields[id_index]]:
                         last_group[sub_key].append(sub_obj)
-                    else:
+                    elif row[nested_id_index] != None:
                         obj = get_obj([row[:split_index]], fields)[0]
                         obj[sub_key] = [sub_obj]
+                        groups.append(obj)
+                    else:
+                        obj[sub_key] = []
                         groups.append(obj)
                 rows = cursor.fetchmany()
             # len(keys(ids))) should match len(groups)
