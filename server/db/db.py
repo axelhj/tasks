@@ -53,12 +53,12 @@ class Db:
                     sub_obj = get_obj([row[split_index:]], fields[split_index:])[0]
                     if last_group and id == last_group[fields[id_index]]:
                         last_group[sub_key].append(sub_obj)
-                    elif row[nested_id_index] != None:
-                        obj = get_obj([row[:split_index]], fields)[0]
-                        obj[sub_key] = [sub_obj]
-                        groups.append(obj)
                     else:
-                        obj[sub_key] = []
+                        obj = get_obj([row[:split_index]], fields)[0]
+                        if row[nested_id_index]:
+                            obj[sub_key] = [sub_obj]
+                        else:
+                            obj[sub_key] = []
                         groups.append(obj)
                 rows = cursor.fetchmany()
             # len(keys(ids))) should match len(groups)
