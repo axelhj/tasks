@@ -42,33 +42,31 @@ export class TaskCard extends Component {
           onClick={ this.props.onClose }
           className={ "background" }
         />
-        <div className="container">
-          { !hidden && (
-            <div className="content">
-              <div className="top-div">
-                <div>
-                  { this.props.task.title}
-                  { this.props.task.description }
-                </div>
-                <div className="action-bar">
-                  <Members
-                    assignedMembers={ this.props.task.members }
-                    teamMembers={ this.props.teamMembers }
-                    onUpdated={ this.onMembersUpdated }
-                  />
-                </div>
+        { !hidden && (
+          <div className="content">
+            <div className="top-div">
+              <div>
+                { this.props.task.title}
+                { this.props.task.description }
               </div>
-              <div className="button-bar">
-                <Button
-                  onClick={ () => this.props.onDelete(this.state.task) }
-                >Delete</Button>
-                <Button
-                  onClick={ () => this.props.onSave(this.state.task) }
-                >Save</Button>
+              <div className="action-bar">
+                <Members
+                  assignedMembers={ this.props.task.members }
+                  teamMembers={ this.props.teamMembers }
+                  onUpdated={ this.onMembersUpdated }
+                />
               </div>
             </div>
-          ) }
+            <div className="button-bar">
+              <Button
+                onClick={ () => this.props.onDelete(this.state.task) }
+              >Delete</Button>
+              <Button
+                onClick={ () => this.props.onSave(this.state.task) }
+              >Save</Button>
+            </div>
           </div>
+        ) }
       </div>
     );
   }

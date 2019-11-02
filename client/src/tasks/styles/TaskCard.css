@@ -1,17 +1,17 @@
-.TaskCard > .container {
-  position: absolute;
+.TaskCard {
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   max-height: 100%;
-  margin: 50px auto;
+  padding: 50px 0;
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
-.TaskCard.hidden > .container {
+.TaskCard.hidden {
   display: none;
 }
 
@@ -35,7 +35,7 @@
     height 0s 0.2s linear;
 }
 
-.TaskCard > .container > .content {
+.TaskCard > .content {
   position: absolute;
   align-self: center;
   max-height: 100%;
@@ -55,7 +55,7 @@
   margin: 15px 0;
 }
 
-.TaskCard > .container > .content > .button-bar {
+.TaskCard > .content > .button-bar {
   position: relative;
   width: 100%;
   display: flex;
