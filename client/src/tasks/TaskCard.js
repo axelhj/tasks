@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import './styles/TaskCard.css';
 import { Button } from '../widgets/Button';
+import { Editor } from '../widgets/Editor';
 import { Members } from './Members';
 
 export class TaskCard extends Component {
@@ -42,6 +43,18 @@ export class TaskCard extends Component {
     }));
   }
 
+  onTitleChange = ({ target: { value: title } }) => {
+    this.setState(state => ({
+      ...state, task: ({ ...state.task, title })
+    }));
+  }
+
+  onDescriptionCHange = ({ target: { value: description } }) => {
+    this.setState(state => ({
+      ...state, task: ({ ...state.task, description })
+    }));
+  }
+
   render() {
     const task = this.getTask() || {};
     const hidden = this.state.visible ? '' : ' hidden';
@@ -54,8 +67,15 @@ export class TaskCard extends Component {
         <div className="outer-content">
           <div className="inner-content">
             <div className="layout">
-              <div>{ task.title}</div>
-              <div>{ task.description }</div>
+              <Editor
+                value={ task.title}
+                onChange={ this.onTitleChange }
+              />
+              <Editor
+                multiline={true}
+                value={ task.description}
+                onChange={ this.onDescriptionCHange }
+              />
             </div>
             <div className="actions">
               <Members

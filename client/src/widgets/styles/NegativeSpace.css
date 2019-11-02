@@ -6,10 +6,6 @@
   left: 0;
 }
 
-.NegativeSpace.disabled > .ns {
-  display: none;
-}
-
 .NegativeSpace > .content {
   position: relative;
 }

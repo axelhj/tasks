@@ -1,3 +1,8 @@
+body, textarea, input {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
 .App {
   text-align: center;
 }

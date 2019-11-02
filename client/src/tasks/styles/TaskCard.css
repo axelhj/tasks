@@ -11,6 +11,10 @@
   text-align: left;
 }
 
+.TaskCard, .TaskCard .input, .TaskCard .textarea {
+  color: #FFFFFF;
+}
+
 .TaskCard > .background {
   background-color: black;
   position: absolute;
@@ -50,11 +54,20 @@
 
 .TaskCard .inner-content {
   display: flex;
-  margin: 15px 0;
+  margin: 5px 0;
 }
 
 .TaskCard .inner-content .layout {
   flex: 1;
+}
+
+.TaskCard .inner-content .layout > *:first-child{
+  margin-right: 10px;
+  margin-bottom: 30px;
+}
+
+.TaskCard .actions {
+  margin-top: 20px;
 }
 
 .TaskCard .buttons {
