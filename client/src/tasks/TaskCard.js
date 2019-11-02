@@ -47,7 +47,7 @@ export class TaskCard extends Component {
             <div className="content">
               <div className="top-div">
                 <div>
-                  { this.props.task.name}
+                  { this.props.task.title}
                   { this.props.task.description }
                 </div>
                 <div className="action-bar">

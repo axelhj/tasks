@@ -8,10 +8,10 @@ export class TaskList extends Component {
       <div className="TaskList">
         { this.props.tasks.map(task =>
           <li
-            key={task.name + "TODO:USE ID"}
+            key={task.id + task.title}
             className="item"
             onClick={ () => this.props.onClick(task) }
-          >{ task.name }</li>
+          >{ task.title }</li>
         ) }
         <div
           className="item add-item"

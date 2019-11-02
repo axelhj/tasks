@@ -3,6 +3,8 @@ import './App.css';
 import { TaskPane } from './tasks/TaskPane.js';
 import { TaskCard } from './tasks/TaskCard.js';
 
+const baseUrl = "http://localhost:80";
+
 const teamMembers = [
   { name: "Person 1" },
   { name: "Person 2" },
@@ -12,65 +14,30 @@ const teamMembers = [
 class App extends Component {
   constructor() {
     super();
-    const firstPane = {
-      name: "Pane 1",
-      tasks: [
-        {
-          name: "Task 1",
-          members: [
-            { name: "Person 1" },
-            { name: "Person 2" }
-          ]
-        },
-        {
-          name: "Task 2",
-          members: [
-            { name: "Person 3" }
-          ]
-        }
-      ]
-    };
-    const secondPane = {
-      name: "Pane 2",
-      tasks: [
-        {
-          name: "Task 3",
-          members: [
-            { name: "Person 1" }
-          ]
-        },
-        {
-          name: "Task 4",
-          members: [
-            { name: "Person 2" },
-            { name: "Person 3" }
-          ]
-        }
-      ]
-
-    };
     this.state = {
       selectedTask: null,
       selectedPane: null,
-      taskLists: [
-        firstPane,
-        secondPane
-      ]
+      taskLists: []
     };
   }
 
   componentDidMount() {
-    // fetch(baseUrl + "/tasks")
-    // .then(data => data.json())
-    // .then(tasks => {
-    //   this.setState({tasks})
-    // });
+    fetch(`${baseUrl}/lists`)
+    .then(data => data.json())
+    .then(lists => {
+      const listsWithMembers = lists.map(list => {
+        return { ...list, tasks: list.tasks.map(task => {
+          return { ...task, members: [] };
+        })}
+      });
+      this.setState({taskLists: listsWithMembers})
+    });
   }
 
-  onClickTask = (task, paneName) => {
+  onClickTask = (task, paneId) => {
     this.setState({
       selectedTask: task,
-      selectedPane: paneName
+      selectedPane: paneId
     });
   }
 
@@ -78,8 +45,8 @@ class App extends Component {
     const { taskLists } = this.state;
     let paneNumber = 0;
     for (let taskList of taskLists) {
-      const value = parseInt(taskList.name.match(/\d$/)[0], 10);
-      if (value > paneNumber) {
+      const value = parseInt((taskList.name.match(/\d$/) || [null])[0], 10);
+      if (!Number.isNaN(value) && value > paneNumber) {
         paneNumber = value;
       }
     }
@@ -91,28 +58,29 @@ class App extends Component {
   }
 
   onAddTask = taskList => {
-    const { name, tasks } = taskList;
+    const { tasks } = taskList;
     let taskNumber = 0;
     for (let task of tasks) {
-      const value = parseInt(task.name.match(/\d$/)[0], 10);
-      if (value > taskNumber) {
+      const value = parseInt(task.title.match(/\d$/)[0], 10);
+      if (!Number.isNaN(value) && value > taskNumber) {
         taskNumber = value;
       }
     }
     this.setState({
       selectedTask: {
-        name: `Task ${taskNumber + 1}`,
+        id: null,
+        title: `Task ${taskNumber + 1}`,
         members: []
       },
-      selectedPane: name
+      selectedPane: taskList.id
     });
   }
 
   onSaveTask = savedTask => {
     const { selectedPane, taskLists } = this.state;
-    const selectedTaskList = taskLists.find(taskList => taskList.name === selectedPane);
+    const selectedTaskList = taskLists.find(taskList => taskList.id === selectedPane);
     const selectedTask = selectedTaskList.tasks
-      .find(task => task.name === savedTask.name);
+      .find(task => task.title === savedTask.title);
     if (selectedTask) {
       selectedTaskList.tasks[selectedTaskList.tasks.indexOf(selectedTask)] = savedTask;
     } else {
@@ -127,8 +95,8 @@ class App extends Component {
 
   onDeleteTask = deletedTask => {
     const { selectedPane, taskLists } = this.state;
-    const selectedTaskList = taskLists.find(taskList => taskList.name === selectedPane);
-    if (selectedTaskList.tasks.find(task => task.name === deletedTask.name)) {
+    const selectedTaskList = taskLists.find(taskList => taskList.id === selectedPane);
+    if (selectedTaskList.tasks.find(task => task.title === deletedTask.title)) {
       selectedTaskList.tasks.splice(selectedTaskList.tasks.indexOf(deletedTask), 1);
     }
     this.setState({
