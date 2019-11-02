@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, Response
+from flask_cors import CORS
 from db.db_error import DbError
 from db.tasks import Tasks
 
@@ -9,6 +10,7 @@ class Api:
 
     def app(self):
         app = Flask(__name__)
+        CORS(app)
         @app.route("/")
         def hello():
             try:
