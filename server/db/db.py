@@ -79,8 +79,8 @@ class Db:
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor()
             cursor.execute(sql)
-            conn.commit()
             if not fetch:
+                conn.commit()
                 return None
             rows = cursor.fetchmany()
             result = []
@@ -107,8 +107,8 @@ class Db:
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor(prepared = True)
             cursor.execute(sql, values)
-            conn.commit()
             if not fetch:
+                conn.commit()
                 return None
             rows = cursor.fetchmany()
             result = []
