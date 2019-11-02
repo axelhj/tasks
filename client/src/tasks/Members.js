@@ -27,9 +27,9 @@ export class Members extends Component {
     }))
   )
 
-  isChecked = ({ name }) =>
+  isChecked = ({ id }) =>
     !!this.props.assignedMembers.find(assignedMember =>
-      assignedMember.name === name)
+      assignedMember.id === id)
 
   onClick = () => {
     this.setState(state => ({

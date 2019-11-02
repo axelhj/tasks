@@ -4,12 +4,6 @@ import { TaskCard } from './TaskCard.js'
 
 const baseUrl = "http://localhost:80";
 
-const teamMembers = [
-  { name: "Person 1" },
-  { name: "Person 2" },
-  { name: "Person 3" }
-];
-
 class Tasks extends Component{
   constructor() {
     super();
@@ -21,16 +15,19 @@ class Tasks extends Component{
   }
 
   componentDidMount() {
-    fetch(`${baseUrl}/lists`)
-    .then(data => data.json())
-    .then(lists => {
-      const listsWithMembers = lists.map(list => {
-        return { ...list, tasks: list.tasks.map(task => {
-          return { ...task, members: [] };
-        })}
+    Promise.all([
+      fetch(`${baseUrl}/users`)
+      .then(data => data.json()),
+      fetch(`${baseUrl}/lists`)
+      .then(data => data.json())
+    ])
+    .then(([members, taskLists]) => {
+      this.setState({
+        members,
+        taskLists
       });
-      this.setState({taskLists: listsWithMembers})
     });
+
   }
 
   onClickTask = (task, paneId) => {
@@ -115,7 +112,7 @@ class Tasks extends Component{
          <TaskCard
           task={ this.state.selectedTask }
           taskLists={ this.state.taskLists }
-          teamMembers={ teamMembers }
+          teamMembers={ this.state.members }
           onClose={ this.closeSelectedTask }
           onSave={ this.onSaveTask }
           onDelete={ this.onDeleteTask }
