@@ -109,23 +109,17 @@ class Tasks extends Component{
     this.setState({ selectedTask: null })
   }
 
-  renderSelectedTask() {
-    return (
-      <TaskCard
-        task={ this.state.selectedTask }
-        taskLists={ this.state.taskLists }
-        teamMembers={ teamMembers }
-        onClose={ this.closeSelectedTask }
-        onSave={ this.onSaveTask }
-        onDelete={ this.onDeleteTask }
-      />
-    );
-  }
-
   render() {
     return (
       <div className="Tasks">
-        { this.renderSelectedTask() }
+         <TaskCard
+          task={ this.state.selectedTask }
+          taskLists={ this.state.taskLists }
+          teamMembers={ teamMembers }
+          onClose={ this.closeSelectedTask }
+          onSave={ this.onSaveTask }
+          onDelete={ this.onDeleteTask }
+        />
         <div className="TaskPane">
           { this.state.taskLists.map(taskList =>
             <div
