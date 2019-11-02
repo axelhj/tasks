@@ -32,14 +32,17 @@ class Db:
         except Error as error:
             raise DbError(error)
 
-    def sql_nested_list(self, sql, fields, sub_key, id_index, nested_id_index, split_index):
+    def sql_nested_list(self, sql, fields, sub_key, id_index, nested_id_index, split_index, prepared_values = None):
         conn = None
         try:
             conn = self.connect()
             if conn == None or not conn.is_connected():
                 raise DbError("Could not establish connection to " + str(self.host))
-            cursor = conn.cursor()
-            cursor.execute(sql)
+            cursor = conn.cursor() if prepared_values else conn.cursor(prepared = True)
+            if prepared_values:
+                cursor.execute(sql, prepared_values)
+            else:
+                cursor.execute(sql)
             rows = cursor.fetchmany()
             ids = {}
             groups = []

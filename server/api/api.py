@@ -61,6 +61,13 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
+        @app.route("/users", methods=["GET"])
+        def get_users():
+            try:
+                return jsonify(self.tasks.get_users())
+            except DbError as error:
+                return jsonify(str(error)), 500
+
         @app.route("/echo", methods=["POST"])
         def echo():
             try:
