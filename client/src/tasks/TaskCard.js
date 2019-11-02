@@ -13,13 +13,15 @@ export class TaskCard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.task === null) {
-      this.setState({ task: null });
-    } else if (this.state.task === null) {
+    if (this.state.task === null) {
       this.setState({
         task: nextProps.task
       });
     }
+  }
+
+  getTask() {
+    return this.state.task || this.props.task;
   }
 
   onMembersUpdated = members => {
@@ -35,38 +37,40 @@ export class TaskCard extends Component {
   }
 
   render() {
-    const hidden = this.props.task === null;
+    const task = this.getTask();
+    if (!this.props.task) {
+      return null;
+    }
+    const hidden = this.props.task === null ? ' hidden' : '';
     return (
-      <div className={ "TaskCard" + (hidden ? " hidden" : "") }>
+      <div className={ "TaskCard" + hidden }>
         <div
           onClick={ this.props.onClose }
           className={ "background" }
         />
-        { !hidden && (
-          <div className="content">
-            <div className="top-div">
-              <div>
-                { this.props.task.title}
-                { this.props.task.description }
-              </div>
-              <div className="action-bar">
-                <Members
-                  assignedMembers={ this.props.task.members }
-                  teamMembers={ this.props.teamMembers }
-                  onUpdated={ this.onMembersUpdated }
-                />
-              </div>
+        <div className="outer-content">
+          <div className="inner-content">
+            <div className="layout">
+              <div>{ task.title}</div>
+              <div>{ task.description }</div>
             </div>
-            <div className="button-bar">
-              <Button
-                onClick={ () => this.props.onDelete(this.state.task) }
-              >Delete</Button>
-              <Button
-                onClick={ () => this.props.onSave(this.state.task) }
-              >Save</Button>
+            <div className="actions">
+              <Members
+                assignedMembers={ task.members || [] }
+                teamMembers={ this.props.teamMembers }
+                onUpdated={ this.onMembersUpdated }
+              />
             </div>
           </div>
-        ) }
+          <div className="buttons">
+            <Button
+              onClick={ () => this.props.onDelete(this.state.task) }
+            >Delete</Button>
+            <Button
+              onClick={ () => this.props.onSave(this.state.task) }
+            >Save</Button>
+          </div>
+        </div>
       </div>
     );
   }

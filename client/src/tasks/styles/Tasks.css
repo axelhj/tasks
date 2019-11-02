@@ -8,7 +8,7 @@
   margin: 3px 5px;
 }
 
-.TaskPane.list-container {
+.TaskPane {
   display: flex;
   background-color: white;
   margin: 15px 5px;
@@ -25,11 +25,11 @@
   border-radius: 5px;
 }
 
-.TaskPane.list-container > .add-pane {
+.TaskPane > .add-pane {
   cursor: default;
 }
 
-.TaskList .item {
+.TaskPane .list-item .item {
   border-radius: 3px;
   padding: 5px;
   margin: 7px 2px;
@@ -37,7 +37,7 @@
   cursor: default;
 }
 
-.TaskList .add-item {
+.TaskPane .list-item .add-item {
   background-color: transparent;
   cursor: default;
 }

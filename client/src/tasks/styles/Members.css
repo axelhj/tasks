@@ -2,8 +2,7 @@
   height: 21px;
   position: relative;
   z-index: 1;
-  display: inline-block;
-  width: 100px;
+  min-width: 100px;
 }
 .Members .list {
   position: absolute;

@@ -126,32 +126,28 @@ class Tasks extends Component{
     return (
       <div className="Tasks">
         { this.renderSelectedTask() }
-        <div className="container">
-          <div className="TaskPane list-container">
-            { this.state.taskLists.map(taskList =>
+        <div className="TaskPane">
+          { this.state.taskLists.map(taskList =>
+            <div
+              key={ taskList.id + taskList.name}
+              className="list-item"
+            >
+              <h3>{ taskList.name }</h3>
+              { taskList.tasks.map(task =>
+                <li
+                  key={task.id + task.title}
+                  className="item"
+                  onClick={ () => this.onClickTask(task, taskList.id) }
+                >{ task.title }</li>
+              ) }
               <div
-                key={ taskList.id + taskList.name}
-                className="list-item"
-              >
-                <h3>{ taskList.name }</h3>
-                <div className="TaskList">
-                  { taskList.tasks.map(task =>
-                    <li
-                      key={task.id + task.title}
-                      className="item"
-                      onClick={ () => this.onClickTask(task, taskList.id) }
-                    >{ task.title }</li>
-                  ) }
-                  <div
-                    className="item add-item"
-                    onClick={ () => this.onAddTask(taskList) }
-                  >Add task...</div>
-                </div>
-              </div>)
-            }
-            <div className="list-item add-pane" onClick={ this.onAddPane }>
-              <h3>Add pane...</h3>
-            </div>
+                className="item add-item"
+                onClick={ () => this.onAddTask(taskList) }
+              >Add task...</div>
+            </div>)
+          }
+          <div className="list-item add-pane" onClick={ this.onAddPane }>
+            <h3>Add pane...</h3>
           </div>
         </div>
       </div>

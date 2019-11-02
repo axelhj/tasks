@@ -11,14 +11,10 @@
   text-align: left;
 }
 
-.TaskCard.hidden {
-  display: none;
-}
-
 .TaskCard > .background {
-  background-color: rgba(0, 0, 0, 0.2);
-  height: 100%;
-  transition: background-color 0.2s linear;
+  background-color: black;
+  opacity: 0.2;
+  transition: opacity 2s linear;
   position: absolute;
   top: 0;
   right: 0;
@@ -28,17 +24,12 @@
 }
 
 .TaskCard.hidden .background {
-  background-color: rgba(0, 0, 0, 0.0);
-  height: 0%;
-  transition:
-    background-color 0.2s linear,
-    height 0s 0.2s linear;
+  opacity: 0;
+  transition: opacity 0.2s linear;
 }
 
-.TaskCard > .content {
-  position: absolute;
+.TaskCard > .outer-content {
   align-self: center;
-  max-height: 100%;
   border-radius: 5px;
   padding: 7px;
   background-color: rgba(150, 200, 230, 0.6);
@@ -49,13 +40,16 @@
   z-index: 200;
 }
 
-.TaskCard .top-div {
+.TaskCard .inner-content {
   display: flex;
-  justify-content: space-between;
   margin: 15px 0;
 }
 
-.TaskCard > .content > .button-bar {
+.TaskCard .inner-content .layout {
+  flex: 1;
+}
+
+.TaskCard .buttons {
   position: relative;
   width: 100%;
   display: flex;
@@ -64,7 +58,7 @@
   overflow-y: auto;
 }
 
-.TaskCard .button-bar > *:not(:last-child) {
+.TaskCard .buttons > *:not(:last-child) {
   margin-right: 7px;
 }
 
