@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './Members.css';
+import './styles/Members.css';
 import { Button } from '../widgets/Button';
 import { NegativeSpace } from '../widgets/NegativeSpace';
 

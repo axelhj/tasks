@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './NegativeSpace.css';
+import './styles/NegativeSpace.css';
 
 export class NegativeSpace extends Component {
   render() {

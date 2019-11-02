@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './TaskCard.css';
+import './styles/TaskCard.css';
 import { Button } from '../widgets/Button';
 import { Members } from './Members';
 
