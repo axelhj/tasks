@@ -49,7 +49,7 @@ export class TaskCard extends Component {
       <div className={ "TaskCard" + hidden }>
         <div
           onClick={ this.props.onClose }
-          className={ "background" }
+          className="background"
         />
         <div className="outer-content">
           <div className="inner-content">
