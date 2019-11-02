@@ -8,15 +8,21 @@ export class TaskCard extends Component {
   constructor() {
     super();
     this.state = {
-      task: null
+      task: null,
+      visible: false
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.task === null) {
-      this.setState({
-        task: nextProps.task
-      });
+  componentWillReceiveProps({ task: nextTask }) {
+    const setVisibility = visible => this.setState({ visible });
+    if (!this.props.task && nextTask) {
+      this.setState({ task: nextTask });
+      setTimeout(() => setVisibility(true), 0);
+    } else if (this.props.task && !nextTask) {
+      setVisibility(false);
+      setTimeout(() => {
+        this.setState({ task: null });
+      }, 200);
     }
   }
 
@@ -37,12 +43,9 @@ export class TaskCard extends Component {
   }
 
   render() {
-    const task = this.getTask();
-    if (!this.props.task) {
-      return null;
-    }
-    const hidden = this.props.task === null ? ' hidden' : '';
-    return (
+    const task = this.getTask() || {};
+    const hidden = this.state.visible ? '' : ' hidden';
+    return this.state.task === null ? null : (
       <div className={ "TaskCard" + hidden }>
         <div
           onClick={ this.props.onClose }

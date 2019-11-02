@@ -1,5 +1,5 @@
 .TaskCard {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
@@ -13,8 +13,6 @@
 
 .TaskCard > .background {
   background-color: black;
-  opacity: 0.2;
-  transition: opacity 2s linear;
   position: absolute;
   top: 0;
   right: 0;
@@ -23,9 +21,19 @@
   z-index: 100;
 }
 
-.TaskCard.hidden .background {
-  opacity: 0;
+.TaskCard .background,
+.TaskCard > .outer-content {
+  opacity: 0.2;
   transition: opacity 0.2s linear;
+}
+
+.TaskCard > .outer-content {
+  opacity: 1;
+}
+
+.TaskCard.hidden .background,
+.TaskCard.hidden > .outer-content {
+  opacity: 0;
 }
 
 .TaskCard > .outer-content {
