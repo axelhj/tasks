@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './styles/Tasks.css';
+import { Editor } from '../widgets/Editor.js'
 import { TaskCard } from './TaskCard.js'
 
 const baseUrl = "http://localhost:80";
@@ -72,6 +73,22 @@ class Tasks extends Component{
     });
   }
 
+  onTaskListNameChange({ target: { value } }, index) {
+    const copyAndReplace = (list, i, value) => {
+      const newList = [...list];
+      newList[i] = value;
+      return newList;
+    };
+    this.setState(state => ({
+      ...state,
+      taskLists: copyAndReplace(
+        state.taskLists,
+        index,
+        { ...state.taskLists[index], name: value }
+      )
+    }));
+  }
+
   onSaveTask = savedTask => {
     const { selectedPane, taskLists } = this.state;
     const selectedTaskList = taskLists.find(taskList => taskList.id === selectedPane);
@@ -118,12 +135,16 @@ class Tasks extends Component{
           onDelete={ this.onDeleteTask }
         />
         <div className="TaskPane">
-          { this.state.taskLists.map(taskList =>
+          { this.state.taskLists.map((taskList, index) =>
             <div
-              key={ taskList.id + taskList.name}
+              key={ taskList.id}
               className="list-item"
             >
-              <h3>{ taskList.name }</h3>
+              <Editor
+                title={ true }
+                value={ taskList.name}
+                onChange={ e => this.onTaskListNameChange(e, index) }
+              />
               { taskList.tasks.map(task =>
                 <li
                   key={task.id + task.title}
