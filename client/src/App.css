@@ -18,7 +18,19 @@ body, textarea, input {
   font-size: 1.5em;
 }
 
-@keyframes App-logo-spin {
+@keyframes element-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.spin-1s  {
+  animation: element-spin 1s linear infinite;
+}
+
+.spin-2s  {
+  animation: element-spin 2s linear infinite;
+}
+
+.spin-3s  {
+  animation: element-spin 3s linear infinite;
 }

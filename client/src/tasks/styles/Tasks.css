@@ -25,6 +25,17 @@
   border-radius: 5px;
 }
 
+.TaskPane .list-item > .Editor .content {
+  position: relative;
+}
+
+.TaskPane .list-item > .Editor .content .Spinner {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  bottom: 0;
+}
+
 .TaskPane > .add-pane {
   cursor: default;
 }

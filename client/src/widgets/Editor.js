@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NegativeSpace } from './NegativeSpace';
+import { Spinner } from './Spinner';
 
 import './styles/Editor.css';
 
@@ -55,7 +56,7 @@ export class Editor extends Component {
         <NegativeSpace
           className={ `Editor ${editing ? "editing" : ""}` }
           disabled={ !editing }
-        >{input}</NegativeSpace>
+        >{this.props.loading && <Spinner />}{input}</NegativeSpace>
     );
   }
 }
