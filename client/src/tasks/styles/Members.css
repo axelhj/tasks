@@ -1,3 +1,22 @@
+.Members {
+  height: 21px;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  width: 100px;
+}
+.Members .list {
+  position: absolute;
+  top: 0;
+  left: -15px;
+  padding-left: 7px;
+  padding-right: 7px;
+  min-width: 110%;
+  background-color: rgba(150, 200, 230, 0.8);
+  border: 1px solid rgba(150, 200, 230, 1);
+  border-radius: 5px;
+}
+
 .Members .member {
   border-radius: 5px;
   padding: 7px;
@@ -5,6 +24,7 @@
   background-color: #EEEE00;
   border: 1px solid #EEEE33;
   cursor: default;
+  white-space: nowrap;
 }
 
 .Members .member > .name {

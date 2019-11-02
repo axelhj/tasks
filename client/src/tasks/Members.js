@@ -70,7 +70,7 @@ export class Members extends Component {
     return (
       <div className="Members">
         { this.state.expanded ?
-          <div className="content">
+          <div className="list">
             { this.renderMembers() }
           </div> :
           <Button onClick={ this.onClick }>Members</Button>

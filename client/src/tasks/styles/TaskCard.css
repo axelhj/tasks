@@ -45,8 +45,7 @@
   color: white;
   width: 700px;
   min-height: 50px;
-  overflow-y: auto;
-  overflow-x: visible;
+  overflow: visible;
   z-index: 200;
 }
 
@@ -62,6 +61,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  overflow-y: auto;
 }
 
 .TaskCard .button-bar > *:not(:last-child) {
