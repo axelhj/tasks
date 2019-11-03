@@ -31,7 +31,11 @@ insert into list (name) values ('Task list 1');
 create table task_in_list (
 task_id INT NOT NULL,
 list_id INT NOT NULL,
-primary key (task_id, list_id)
+primary key (task_id, list_id),
+foreign key (task_id) references task (id)
+on delete cascade,
+foreign key (list_id) references list (id)
+on delete cascade
 );
 
 insert into task_in_list (task_id, list_id) values (1, 1);
