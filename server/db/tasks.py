@@ -115,8 +115,29 @@ list_id = VALUES(list_id), task_id = VALUES(task_id)
         return new_task_id
 
     def del_list(self, id):
-        # TODO: Taks referencing list through task_in_list
-        raise Error("not implemented")
+        self.db.prepared_sql(
+            'delete from list where id = %s',
+            [id],
+            False,
+            persisting = True
+        )
+        self.db.sql('''
+delete t from task as t
+left join task_in_list as tl on tl.task_id = t.id
+where tl.task_id is NULL
+''',
+            None,
+            False,
+            persisting = True
+        )
+
+    def del_task(self, id):
+        self.db.prepared_sql(
+            'delete from task where id = %s',
+            [id],
+            False,
+            persisting = True
+        )
 
     def get_tasks(self):
         return self.db.sql('''

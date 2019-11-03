@@ -53,6 +53,15 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
+        @app.route("/lists/<id>/delete", methods=["POST"])
+        @app.route("/lists/<id>", methods=["DELETE"])
+        def delete_list(id):
+            try:
+                self.tasks.del_list(id)
+                return jsonify({ "result": 'OK', "operation": 'delete', "id": id })
+            except DbError as error:
+                return jsonify(str(error)), 500
+
         @app.route("/lists", methods=["POST"])
         def add_list():
             try:
@@ -92,6 +101,15 @@ class Api:
                     return Response("The title and description must be supplied", status=400)
                 self.tasks.add_or_update_task(id, title, description, list_id)
                 return jsonify({ "result": 'OK', "id": id })
+            except DbError as error:
+                return jsonify(str(error)), 500
+
+        @app.route("/tasks/<id>/delete", methods=["POST"])
+        @app.route("/tasks/<id>", methods=["DELETE"])
+        def delete_task(id):
+            try:
+                self.tasks.del_task(id)
+                return jsonify({ "result": 'OK', "operation": 'delete', "id": id })
             except DbError as error:
                 return jsonify(str(error)), 500
 
