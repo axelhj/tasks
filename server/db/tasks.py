@@ -2,9 +2,6 @@ class Tasks:
     def __init__(self, db):
         self.db = db
 
-    def get_all(self):
-        return self.db.sql('select title, description from task limit 100')
-
     def get_users_by_task_id(self, task_ids = []):
         user_id_replace = (',').join(['%s'] * len(task_ids))
         return self.db.sql_nested_list('''
@@ -70,19 +67,21 @@ limit 1''',
     def add_or_update_list(self, id, name, sort_order = None):
         if id:
             self.db.prepared_sql('''
-    insert into list (name) value (%s) where id = %s
-    ''',
+update list set name = (%s) where id = %s
+''',
                 [name, id],
-                False
+                False,
+                persisting = True
             )
+            return id
         else:
-            self.db.prepared_sql('''
-    insert into list (name) value (%s)
-    ''',
+            return self.db.prepared_sql('''
+insert into list (name) value (%s)
+''',
                 [name],
-                False
+                fetch = True,
+                persisting = True
             )
-        return 0
 
     def del_list(self, id):
         # TODO: Taks referencing list through task_in_list

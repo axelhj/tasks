@@ -43,10 +43,13 @@ class Api:
         def update_list(id):
             try:
                 req = request.json
-                if not req or not req["name"]:
-                    return Response("Request body missing or bad", status=400)
-                result = self.tasks.add_or_update_list(id, req["name"])
-                return jsonify({ "result": 'OK', "id": result })
+                if not req:
+                    return Response("Request body missing", status=400)
+                name = req['name']
+                if not name:
+                    return Response("The task list name must be supplied", status=400)
+                id = self.tasks.add_or_update_list(id, name)
+                return jsonify({ "result": 'OK', "id": id })
             except DbError as error:
                 return jsonify(str(error)), 500
 
@@ -54,8 +57,11 @@ class Api:
         def add_list():
             try:
                 req = request.json
-                if not req or not req["name"]:
-                    return Response("Request body missing or bad", status=400)
+                if not req:
+                    return Response("Request body missing", status=400)
+                name = req['name']
+                if not name:
+                    return Response("The task list name must be supplied", status=400)
                 result = self.tasks.add_or_update_list(None, req["name"])
                 return jsonify({ "result": 'OK', "id": result })
             except DbError as error:

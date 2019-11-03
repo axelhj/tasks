@@ -74,7 +74,7 @@ class Db:
                     cursor.close()
                 conn.close()
 
-    def sql(self, sql, fields = None, fetch = True):
+    def sql(self, sql, fields = None, fetch = True, persisting = False):
         conn = None
         try:
             conn = self.connect()
@@ -82,8 +82,10 @@ class Db:
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor()
             cursor.execute(sql)
-            if not fetch:
+            if persisting:
                 conn.commit()
+                return cursor.lastrowid
+            if not fetch:
                 return None
             rows = cursor.fetchmany()
             result = []
@@ -92,7 +94,7 @@ class Db:
                 rows = cursor.fetchmany()
             return result
         except Error as error:
-            if conn and conn.is_connected():
+            if persisting  and conn and conn.is_connected():
                 conn.rollback()
             raise DbError(error)
         finally:
@@ -101,7 +103,7 @@ class Db:
                     cursor.close()
                 conn.close()
 
-    def prepared_sql(self, sql, values = [], fetch = True):
+    def prepared_sql(self, sql, values = [], fetch = True, persisting = False):
         conn = None
         cursor = None
         try:
@@ -110,8 +112,10 @@ class Db:
                 raise DbError("Could not establish connection to " + str(self.host))
             cursor = conn.cursor(prepared = True)
             cursor.execute(sql, values)
-            if not fetch:
+            if persisting:
                 conn.commit()
+                return cursor.lastrowid
+            if not fetch:
                 return None
             rows = cursor.fetchmany()
             result = []
@@ -120,7 +124,7 @@ class Db:
                 rows = cursor.fetchmany()
             return result
         except Error as error:
-            if conn and conn.is_connected():
+            if persisting and conn and conn.is_connected():
                 conn.rollback()
             raise DbError(error)
         finally:
