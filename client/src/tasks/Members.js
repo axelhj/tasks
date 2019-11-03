@@ -35,7 +35,6 @@ export class Members extends Component {
     this.setState(state => ({
       expanded: !state.expanded
     }));
-    console.log("clicked, clickity", this.state.expanded);
   }
 
   onClickMember = index => {

@@ -51,7 +51,6 @@ export class Editor extends Component {
         value={ this.props.value }
       />
     );
-    console.log(editing);
     return (
         <NegativeSpace
           className={ `Editor ${editing ? "editing" : ""}` }
