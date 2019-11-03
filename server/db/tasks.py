@@ -94,7 +94,6 @@ update task set title = (%s), description = (%s) where id = %s
                 persisting = True
             )
         else:
-            # could start a transaction here
             new_task_id = self.db.prepared_sql('''
 insert into task (title, description) values (%s, %s)
 ''',
