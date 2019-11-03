@@ -67,6 +67,54 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
+        @app.route("/tasks", methods=["GET"])
+        def get_tasks():
+            try:
+                return jsonify(self.tasks.get_tasks())
+            except DbError as error:
+                return jsonify(str(error)), 500
+
+        @app.route("/tasks/<id>", methods=["POST"])
+        def update_task(id):
+            try:
+                req = request.json
+                if not req:
+                    return Response("Request body missing", status=400)
+                list_id = None
+                title = None
+                description = None
+                if 'list' in req:
+                    list_id = req['list']
+                try:
+                    title = req['title']
+                    description = req['description']
+                except:
+                    return Response("The title and description must be supplied", status=400)
+                self.tasks.add_or_update_task(id, title, description, list_id)
+                return jsonify({ "result": 'OK', "id": id })
+            except DbError as error:
+                return jsonify(str(error)), 500
+
+        @app.route("/tasks", methods=["POST"])
+        def add_task():
+            try:
+                req = request.json
+                if not req:
+                    return Response("Request body missing", status=400)
+                list_id = None
+                title = None
+                description = None
+                try:
+                    list_id = req['list']
+                    title = req['title']
+                    description = req['description']
+                except:
+                    return Response("The list id, title and description must be supplied", status=400)
+                result = self.tasks.add_or_update_task(None, title, description, list_id)
+                return jsonify({ "result": 'OK', "id": result })
+            except DbError as error:
+                return jsonify(str(error)), 500
+
         @app.route("/users", methods=["GET"])
         def get_users():
             try:

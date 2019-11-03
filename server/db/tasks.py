@@ -83,9 +83,49 @@ insert into list (name) value (%s)
                 persisting = True
             )
 
+    def add_or_update_task(self, task_id, title, description, list_id = None):
+        new_task_id = None
+        if task_id:
+            self.db.prepared_sql('''
+update task set title = (%s), description = (%s) where id = %s
+''',
+                [title, description, task_id],
+                False,
+                persisting = True
+            )
+        else:
+            # could start a transaction here
+            new_task_id = self.db.prepared_sql('''
+insert into task (title, description) values (%s, %s)
+''',
+                [title, description],
+                fetch = True,
+                persisting = True
+            )
+        if list_id:
+            self.db.prepared_sql('''
+insert into task_in_list (list_id, task_id)
+values (%s, %s)
+on duplicate key update
+list_id = VALUES(list_id), task_id = VALUES(task_id)
+''',
+                [list_id, task_id if task_id else new_task_id],
+                False,
+                persisting = True
+            )
+        return new_task_id
+
     def del_list(self, id):
         # TODO: Taks referencing list through task_in_list
         raise Error("not implemented")
+
+    def get_tasks(self):
+        return self.db.sql('''
+select t.id as t, title, description, list_id as list from task as t
+left join task_in_list as l on t.id = l.task_id
+limit 100
+''',
+        'id,title, description,list'.split(','))
 
     def get_users(self):
         return self.db.sql('select id, name, bio from user limit 100', 'id,name,bio'.split(','))
