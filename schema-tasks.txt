@@ -29,17 +29,17 @@ updated DATE default NOW()
 insert into list (name) values ('Task list 1');
 
 create table task_in_list (
-id INT auto_increment primary key,
 task_id INT NOT NULL,
-list_id INT NOT NULL
+list_id INT NOT NULL,
+primary key (task_id, list_id)
 );
 
 insert into task_in_list (task_id, list_id) values (1, 1);
 
 create table user_in_task (
-id INT auto_increment primary key,
 task_id INT NOT NULL,
-user_id INT NOT NULL
+user_id INT NOT NULL,
+primary key (task_id, user_id)
 );
 
 insert into user_in_task (task_id, user_id) values (1, 1);
