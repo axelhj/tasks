@@ -2,8 +2,14 @@ class Tasks:
     def __init__(self, db):
         self.db = db
 
+    def multiply_symbol(self, count):
+        return (', ').join(['%s'] * count)
+
+    def insert_list_symbols(self, list_len, lists_len):
+        return ', '.join(['({})'.format(self.multiply_symbol(list_len))] * lists_len)
+
     def get_users_by_task_id(self, task_ids = []):
-        user_id_replace = (',').join(['%s'] * len(task_ids))
+        user_id_replace = self.multiply_symbol(len(task_ids))
         return self.db.sql_nested_list('''
 select u.id as id, u.name as name, u.bio as bio, ut.id as id2 from user as u
 left join user_in_task as ut on u.id = ut.user_id
@@ -83,7 +89,7 @@ insert into list (name) value (%s)
                 persisting = True
             )
 
-    def add_or_update_task(self, task_id, title, description, list_id = None):
+    def add_or_update_task(self, task_id, title, description, members = [], list_id = None):
         new_task_id = None
         if task_id:
             self.db.prepared_sql('''
@@ -109,6 +115,22 @@ on duplicate key update
 list_id = VALUES(list_id), task_id = VALUES(task_id)
 ''',
                 [list_id, task_id if task_id else new_task_id],
+                False,
+                persisting = True
+            )
+        members_count = len(members) if members else 0
+        if members_count:
+            insert_task_id = int(task_id) if task_id else new_task_id
+            values = []
+            values_nested = [[insert_task_id, member['id']] for member in members]
+            for nested in values_nested:
+                values += nested
+            user_ids_replace = self.insert_list_symbols(2, members_count)
+            self.db.prepared_sql('''
+insert into user_in_task (task_id, user_id)
+values {}
+'''.format(user_ids_replace),
+                values,
                 False,
                 persisting = True
             )

@@ -92,14 +92,17 @@ class Api:
                 list_id = None
                 title = None
                 description = None
+                members = []
                 if 'list' in req:
                     list_id = req['list']
+                if 'members' in req:
+                    members = req['members']
                 try:
                     title = req['title']
                     description = req['description']
                 except:
                     return Response("The title and description must be supplied", status=400)
-                self.tasks.add_or_update_task(id, title, description, list_id)
+                self.tasks.add_or_update_task(id, title, description, members, list_id)
                 return jsonify({ "result": 'OK', "id": id })
             except DbError as error:
                 return jsonify(str(error)), 500
@@ -122,13 +125,16 @@ class Api:
                 list_id = None
                 title = None
                 description = None
+                members = []
+                if 'members' in req:
+                    members = req['members']
                 try:
                     list_id = req['list']
                     title = req['title']
                     description = req['description']
                 except:
                     return Response("The list id, title and description must be supplied", status=400)
-                result = self.tasks.add_or_update_task(None, title, description, list_id)
+                result = self.tasks.add_or_update_task(None, title, description, members, list_id)
                 return jsonify({ "result": 'OK', "id": result })
             except DbError as error:
                 return jsonify(str(error)), 500

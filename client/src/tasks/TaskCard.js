@@ -34,7 +34,7 @@ export class TaskCard extends Component {
   onMembersUpdated = members => {
     const filteredMembers = members
       .filter(member => member.checked)
-      .map(({ name }) => ({ name }));
+      .map(({ id, name }) => ({ id, name }));
     this.setState(state => ({
       task: {
         ...state.task,
