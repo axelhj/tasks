@@ -41,6 +41,7 @@
 }
 
 .TaskCard > .outer-content {
+  position: relative;
   align-self: center;
   border-radius: 5px;
   padding: 7px;
@@ -81,6 +82,16 @@
 
 .TaskCard .buttons > *:not(:last-child) {
   margin-right: 7px;
+}
+
+.TaskCard .overlay-blocker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 3;
 }
 
 /*linear-gradient(to top, #6d50a2, #ed2b88);*/

@@ -65,9 +65,11 @@ export class TaskCard extends Component {
           className="background"
         />
         <div className="outer-content">
+          { this.props.selectedTaskIsPendingUpdate && <div className="overlay-blocker" /> }
           <div className="inner-content">
             <div className="layout">
               <Editor
+                loading={ this.props.selectedTaskIsPendingUpdate }
                 value={ task.title}
                 onChange={ this.onTitleChange }
               />
