@@ -9,13 +9,14 @@ class Tasks:
         return ', '.join(['({})'.format(self.multiply_symbol(list_len))] * lists_len)
 
     def get_users_by_task_id(self, task_ids = []):
-        user_id_replace = self.multiply_symbol(len(task_ids))
+        task_id_replace = self.multiply_symbol(len(task_ids))
         return self.db.sql_nested_list('''
-select u.id as id, u.name as name, u.bio as bio, ut.id as id2 from user as u
+select u.id as id, u.name as name, u.bio as bio, ut.task_id as task_id
+from user as u
 left join user_in_task as ut on u.id = ut.user_id
-where u.id in ({})
+where ut.task_id in ({})
 order by id
-limit 100'''.format(user_id_replace),
+limit 100'''.format(task_id_replace),
             'id,name,bio,id'.split(','),
             'tasks',
             0,
