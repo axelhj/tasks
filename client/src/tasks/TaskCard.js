@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './styles/TaskCard.css';
 import { Button } from '../widgets/Button';
 import { Editor } from '../widgets/Editor';
-import { Members } from './Members';
+import { Select } from '../widgets/Select';
 
 export class TaskCard extends Component {
   constructor() {
@@ -32,13 +32,10 @@ export class TaskCard extends Component {
   }
 
   onMembersUpdated = members => {
-    const filteredMembers = members
-      .filter(member => member.checked)
-      .map(({ id, name }) => ({ id, name }));
     this.setState(state => ({
       task: {
         ...state.task,
-        members: filteredMembers
+        members
       }
     }));
   }
@@ -80,10 +77,10 @@ export class TaskCard extends Component {
               />
             </div>
             <div className="actions">
-              <Members
-                assignedMembers={ task.members || [] }
-                teamMembers={ this.props.teamMembers }
-                onUpdated={ this.onMembersUpdated }
+              <Select
+                checkedValues={ task.members || [] }
+                options={ this.props.teamMembers }
+                onSelect={ this.onMembersUpdated }
               />
             </div>
           </div>

@@ -1,11 +1,11 @@
-.Members {
+.Select {
   height: 21px;
   position: relative;
   z-index: 1;
   min-width: 100px;
 }
 
-.Members .list {
+.Select .list {
   position: absolute;
   top: 0;
   left: -15px;
@@ -17,7 +17,7 @@
   border-radius: 5px;
 }
 
-.Members .member {
+.Select .option {
   border-radius: 5px;
   padding: 7px;
   margin: 5px 0;
@@ -27,12 +27,12 @@
   white-space: nowrap;
 }
 
-.Members .member > .name {
+.Select .option > .label {
   color: #444444;
   margin: 0;
 }
 
-.Members .member > .check-area {
+.Select .option > .checkmark {
   display: inline-block;
   border-radius: 50%;
   width: 12px;
@@ -41,6 +41,6 @@
   visibility: hidden;
 }
 
-.Members .member > .checked {
+.Select .option > .checked {
   visibility: visible;
 }
