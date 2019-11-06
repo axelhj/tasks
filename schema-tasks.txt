@@ -43,7 +43,11 @@ insert into task_in_list (task_id, list_id) values (1, 1);
 create table user_in_task (
 task_id INT NOT NULL,
 user_id INT NOT NULL,
-primary key (task_id, user_id)
+primary key (task_id, user_id),
+foreign key (task_id) references task (id)
+on delete cascade,
+foreign key (user_id) references user (id)
+on delete cascade
 );
 
 insert into user_in_task (task_id, user_id) values (1, 1);
