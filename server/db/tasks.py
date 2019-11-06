@@ -120,15 +120,15 @@ list_id = VALUES(list_id), task_id = VALUES(task_id)
                 persisting = True
             )
         members_count = len(members) if members else 0
+        if task_id:
+            self.db.prepared_sql('''
+delete from user_in_task where task_id = %s
+''',
+                [task_id],
+                False,
+                persisting = True
+            )
         if members_count:
-            if task_id:
-                self.db.prepared_sql('''
-    delete from user_in_task where task_id = %s
-    ''',
-                    [task_id],
-                    False,
-                    persisting = True
-                )
             insert_task_id = int(task_id) if task_id else new_task_id
             values = []
             values_nested = [[insert_task_id, member['id']] for member in members]
