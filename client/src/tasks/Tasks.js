@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './styles/Tasks.css';
 import { Editor } from '../widgets/Editor.js'
+import { Select } from '../widgets/Select.js'
 import { TaskCard } from './TaskCard.js'
 
 const baseUrl = "http://localhost:80";
@@ -13,10 +14,12 @@ class Tasks extends Component{
       selectedTaskIsPendingUpdate: false,
       selectedPane: null,
       taskLists: [],
-      listsPendingUpdate: []
+      listsPendingUpdate: [],
+      taskListOfIdIsPendingDelete: null
     };
     this.pendingNameEdits = [];
     this.lastKnownCorrectName = null;
+    this.toggleTaskListRefs = {};
   }
 
   componentDidMount() {
@@ -135,15 +138,9 @@ class Tasks extends Component{
     .then(() => {
       this.pendingNameEdits = removeByItemKeyValue(this.pendingNameEdits, updatedTaskList.name, 'name')
       this.lastKnownCorrectName = name;
-      this.setState(({ listsPendingUpdate }) => ({
-        listsPendingUpdate: removeByItemKeyValue(listsPendingUpdate, updatedTaskList.id)
-      }));
     })
     .catch(error => {
       console.error(`Error updating name: ${error}`);
-      this.setState(({ listsPendingUpdate }) => ({
-        listsPendingUpdate: removeByItemKeyValue(listsPendingUpdate, updatedTaskList.id)
-      }));
       this.setState(state => ({
         taskLists: copyAndReplaceAt(
           state.taskLists,
@@ -155,6 +152,31 @@ class Tasks extends Component{
         )
       }));
       this.pendingNameEdits = removeByItemKeyValue(this.pendingNameEdits, updatedTaskList.name, 'name')
+    })
+    .then(() => {
+      this.setState(({ listsPendingUpdate }) => ({
+        listsPendingUpdate: removeByItemKeyValue(listsPendingUpdate, updatedTaskList.id)
+      }));
+    });
+  }
+
+  onDeleteTaskList(id) {
+    this.setState({ taskListOfIdIsPendingDelete: id });
+    const url = `${baseUrl}/lists/${id}/delete`;
+    fetch(url, {
+      method: 'POST'
+    })
+    .then(res => res.json())
+    .then(() => {
+      this.setState(({ taskLists }) => ({
+        taskLists: taskLists.filter(({ id: taskListId }) => id !== taskListId)
+      }));
+    })
+    .catch(error => {
+      console.error(`Error deleting tasklist: ${error}`);
+    })
+    .then(() => {
+      this.setState({ taskListOfIdIsPendingDelete: false });
     });
   }
 
@@ -186,7 +208,6 @@ class Tasks extends Component{
         selectedTaskList.tasks.push(savedTask);
       }
       this.setState({
-        selectedTaskIsPendingUpdate: false,
         selectedTask: null,
         selectedPane: null,
         taskLists
@@ -194,6 +215,8 @@ class Tasks extends Component{
     })
     .catch(error => {
       console.error(`Error saving task: ${error}`);
+    })
+    .then(() => {
       this.setState({ selectedTaskIsPendingUpdate: false });
     });
   }
@@ -211,7 +234,6 @@ class Tasks extends Component{
         selectedTaskList.tasks.splice(selectedTaskList.tasks.indexOf(deletedTask), 1);
       }
       this.setState({
-        selectedTaskIsPendingUpdate: false,
         selectedTask: null,
         selectedPane: null,
         taskLists
@@ -219,6 +241,8 @@ class Tasks extends Component{
     })
     .catch(error => {
       console.error(`Error deleting task: ${error}`);
+    })
+    .then(() => {
       this.setState({ selectedTaskIsPendingUpdate: false });
     });
   }
@@ -245,11 +269,26 @@ class Tasks extends Component{
               key={ taskList.id}
               className="list-item"
             >
+              { this.state.taskListOfIdIsPendingDelete === taskList.id &&
+                <div className="overlay-blocker" />
+              }
               <Editor
                 title={ true }
                 value={ taskList.name}
                 onChange={ e => this.onTaskListNameChange(e, index) }
               />
+              <Select
+                options={ [ { id: 0, label: "Delete list" } ] }
+                labelKey="label"
+                checkedValues={ [] }
+                onSelect={ () => {
+                  this.onDeleteTaskList(taskList.id);
+                  this.toggleTaskListRefs[index]();
+                } }
+                triggerToggleRef={ ref => this.toggleTaskListRefs[index] = ref }
+              >
+                <span onClick={ () => this.toggleTaskListRefs[index]() }>...</span>
+              </Select>
               { taskList.tasks.map(task =>
                 <li
                   key={task.id + task.title}

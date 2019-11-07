@@ -12,6 +12,19 @@ export class Select extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setTriggerToggleRef();
+  }
+
+  componentDidUpdate() {
+    this.setTriggerToggleRef();
+  }
+
+  setTriggerToggleRef() {
+    const { triggerToggleRef } = this.props;
+    triggerToggleRef && triggerToggleRef(this.onToggleOpen);
+  }
+
   isChecked = ({ id }) =>
     !!this.props.checkedValues.find(value => value.id === id)
 
@@ -55,7 +68,8 @@ export class Select extends Component {
               )) }
             </NegativeSpace>
           </div> :
-          <Button onClick={ this.onToggleOpen }>{ this.props.buttonLabel || "Select" }</Button>
+          this.props.children ||
+            <Button onClick={ this.onToggleOpen }>{ this.props.buttonLabel || "Select" }</Button>
         }
       </div>
     );
