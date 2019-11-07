@@ -22,5 +22,11 @@ yarn-error.log*
 
 /.vscode
 
+# build output
+/client/build
+/server/static
+
+**/*~
+
 # python
 **/__pycache__/**/*
