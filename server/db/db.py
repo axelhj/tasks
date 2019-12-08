@@ -15,20 +15,29 @@ def get_obj(rows, fields):
         return rows
 
 class Db:
-    def __init__(self, host, database, user, password):
+    def __init__(self, host, database, user, password, unix_socket = None):
         self.host = host
         self.database = database
         self.user = user
         self.password = password
+        self.unix_socket = unix_socket
 
     def connect(self):
         try:
-            return connector.connect(
-                host = self.host,
-                database = self.database,
-                user = self.user,
-                password = self.password
-            )
+            if self.host:
+                return connector.connect(
+                    host = self.host,
+                    database = self.database,
+                    user = self.user,
+                    password = self.password
+                )
+            else:
+                return connector.connect(
+                    unix_socket = self.unix_socket,
+                    database = self.database,
+                    user = self.user,
+                    password = self.password
+                )
         except Error as error:
             raise DbError(error)
 

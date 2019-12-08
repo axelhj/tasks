@@ -3,8 +3,8 @@ create table task (
 id INT auto_increment primary key,
 title VARCHAR(2000) NOT NULL default '',
 description TEXT,
-created DATE default NOW(),
-updated DATE default NOW()
+created DATETIME default NOW(),
+updated DATETIME default NOW()
 );
 
 insert into task (title, description) values ('Card 1', 'This is the first task.'); 
@@ -13,8 +13,8 @@ create table user (
 id INT auto_increment primary key,
 name VARCHAR(2000) NOT NULL default '',
 bio TEXT,
-created DATE default NOW(),
-seen DATE
+created DATETIME default NOW(),
+seen DATETIME
 );
 
 insert into user (name, bio) values ('User 1', 'Default user 1');
@@ -22,8 +22,8 @@ insert into user (name, bio) values ('User 1', 'Default user 1');
 create table list (
 id INT auto_increment primary key,
 name VARCHAR(2000) NOT NULL default '',
-created DATE default NOW(),
-updated DATE default NOW()
+created DATETIME default NOW(),
+updated DATETIME default NOW()
 );
 
 insert into list (name) values ('Task list 1');

@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from db.db_error import DbError
 from db.tasks import Tasks
+import os
 
 class Api:
     def __init__(self, db):
@@ -9,15 +10,16 @@ class Api:
         self.tasks = Tasks(db)
 
     def app(self):
-        app = Flask(__name__)
+        cwd = os.getcwd()
+        app = Flask(__name__, static_folder = os.path.join(cwd, "static"), static_url_path='/')
         CORS(app)
-        @app.route("/")
-        def hello():
-            try:
-                sql = self.tasks.get_all()
-                return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
-            except DbError as error:
-                return jsonify(str(error)), 500
+        # @app.route("/")
+        # def hello():
+        #     try:
+        #         sql = self.tasks.get_all()
+        #         return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+        #     except DbError as error:
+        #         return jsonify(str(error)), 500
 
         @app.route("/lists", methods=["GET"])
         def get_lists():
