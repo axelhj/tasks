@@ -9,19 +9,19 @@ class Api:
         self.db = db
         self.tasks = Tasks(db)
 
-    def app(self):
+    def app(self, base_url=''):
         cwd = os.getcwd()
         app = Flask(__name__, static_folder = os.path.join(cwd, "static"), static_url_path='/')
         CORS(app)
-        # @app.route("/")
-        # def hello():
-        #     try:
-        #         sql = self.tasks.get_all()
-        #         return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
-        #     except DbError as error:
-        #         return jsonify(str(error)), 500
+        @app.route(base_url + "/")
+        def hello():
+            try:
+                sql = self.tasks.get_all()
+                return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
+            except DbError as error:
+                return jsonify(str(error)), 500
 
-        @app.route("/lists", methods=["GET"])
+        @app.route(base_url + "/lists", methods=["GET"])
         def get_lists():
             try:
                 sql = self.tasks.get_lists()
@@ -29,7 +29,7 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/lists/<id>", methods=["GET"])
+        @app.route(base_url + "/lists/<id>", methods=["GET"])
         def get_list(id):
             try:
                 if not id:
@@ -41,7 +41,7 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/lists/<id>", methods=["POST"])
+        @app.route(base_url + "/lists/<id>", methods=["POST"])
         def update_list(id):
             try:
                 req = request.json
@@ -55,8 +55,8 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/lists/<id>/delete", methods=["POST"])
-        @app.route("/lists/<id>", methods=["DELETE"])
+        @app.route(base_url + "/lists/<id>/delete", methods=["POST"])
+        @app.route(base_url + "/lists/<id>", methods=["DELETE"])
         def delete_list(id):
             try:
                 self.tasks.del_list(id)
@@ -64,7 +64,7 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/lists", methods=["POST"])
+        @app.route(base_url + "/lists", methods=["POST"])
         def add_list():
             try:
                 req = request.json
@@ -78,14 +78,14 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/tasks", methods=["GET"])
+        @app.route(base_url + "/tasks", methods=["GET"])
         def get_tasks():
             try:
                 return jsonify(self.tasks.get_tasks())
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/tasks/<id>", methods=["POST"])
+        @app.route(base_url + "/tasks/<id>", methods=["POST"])
         def update_task(id):
             try:
                 req = request.json
@@ -109,8 +109,8 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/tasks/<id>/delete", methods=["POST"])
-        @app.route("/tasks/<id>", methods=["DELETE"])
+        @app.route(base_url + "/tasks/<id>/delete", methods=["POST"])
+        @app.route(base_url + "/tasks/<id>", methods=["DELETE"])
         def delete_task(id):
             try:
                 self.tasks.del_task(id)
@@ -118,7 +118,7 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/tasks", methods=["POST"])
+        @app.route(base_url + "/tasks", methods=["POST"])
         def add_task():
             try:
                 req = request.json
@@ -141,14 +141,14 @@ class Api:
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/users", methods=["GET"])
+        @app.route(base_url + "/users", methods=["GET"])
         def get_users():
             try:
                 return jsonify(self.tasks.get_users())
             except DbError as error:
                 return jsonify(str(error)), 500
 
-        @app.route("/echo", methods=["POST"])
+        @app.route(base_url + "/echo", methods=["POST"])
         def echo():
             try:
                 res = request.json

@@ -4,7 +4,7 @@ import { Editor } from '../widgets/Editor.js'
 import { Select } from '../widgets/Select.js'
 import { TaskCard } from './TaskCard.js'
 
-const baseUrl = "http://localhost:80";
+const baseUrl = "";
 
 class Tasks extends Component{
   constructor() {

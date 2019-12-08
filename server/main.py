@@ -25,19 +25,20 @@ def get_connection_details():
             'password': 'local_dev_password_is_unset'
         }
 
+connection_details = get_connection_details()
+db = Db(
+    connection_details['host'] \
+        if 'host' in connection_details \
+            else None,
+    connection_details['database'],
+    connection_details['user'],
+    connection_details['password'],
+    connection_details['unix_socket'] \
+        if 'unix_socket' in connection_details \
+            else None
+)
+api = Api(db)
+app = api.app()
+
 if __name__ == '__main__':
-    connection_details = get_connection_details()
-    db = Db(
-        connection_details['host'] \
-            if 'host' in connection_details \
-                else None,
-        connection_details['database'],
-        connection_details['user'],
-        connection_details['password'],
-        connection_details['unix_socket'] \
-            if 'unix_socket' in connection_details \
-                else None
-    )
-    api = Api(db)
-    app = api.app()
-    app.run(host="0.0.0.0", port=8080, debug=True),
+    app.run(host="127.0.0.1", port=8080),
