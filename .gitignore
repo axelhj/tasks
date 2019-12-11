@@ -26,6 +26,9 @@ yarn-error.log*
 /client/build
 /server/static
 
+# misc
+/server/.env
+/server/app.yaml
 **/*~
 
 # python

@@ -1,42 +1,19 @@
-from os import environ
+from os import environ, getcwd, path
+from dotenv import load_dotenv
 from db.db import Db
 from api.api import Api
 
-def get_env(key, default = None):
-    return environ[key] if key in environ else default
+env_path = path.join(getcwd(), ".env")
+if path.isfile(env_path):
+    load_dotenv(env_path)
 
-def get_connection_details():
-    unix_socket = get_env('CLOUD_SQL_CONNECTION_NAME')
-    database = get_env('CLOUD_SQL_DATABASE_NAME')
-    user = get_env('CLOUD_SQL_USERNAME')
-    password = get_env('CLOUD_SQL_PASSWORD')
-    if unix_socket:
-        return {
-            'unix_socket': unix_socket,
-            'database': database,
-            'user': user,
-            'password': password
-        }
-    else:
-        return {
-            'host': 'localhost',
-            'database': 'Tasks',
-            'user': 'user',
-            'password': 'local_dev_password_is_unset'
-        }
+hostname = environ.get('SQL_HOSTNAME')
+unix_socket = environ.get('SQL_CONNECTION_NAME')
+database = environ.get('SQL_DATABASE_NAME')
+user = environ.get('SQL_USERNAME')
+password = environ.get('SQL_PASSWORD')
 
-connection_details = get_connection_details()
-db = Db(
-    connection_details['host'] \
-        if 'host' in connection_details \
-            else None,
-    connection_details['database'],
-    connection_details['user'],
-    connection_details['password'],
-    connection_details['unix_socket'] \
-        if 'unix_socket' in connection_details \
-            else None
-)
+db = Db(hostname, database, user, password, unix_socket)
 api = Api(db)
 app = api.app()
 
