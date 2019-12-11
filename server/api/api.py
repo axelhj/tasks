@@ -13,13 +13,6 @@ class Api:
         cwd = os.getcwd()
         app = Flask(__name__, static_folder = os.path.join(cwd, "static"), static_url_path='/')
         CORS(app)
-        @app.route(base_url + "/")
-        def hello():
-            try:
-                sql = self.tasks.get_all()
-                return jsonify(list(map(lambda x: x[0] + ": " + x[1], sql)))
-            except DbError as error:
-                return jsonify(str(error)), 500
 
         @app.route(base_url + "/lists", methods=["GET"])
         def get_lists():
